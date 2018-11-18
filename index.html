@@ -36,9 +36,9 @@
                 <div class="small-12 columns">
                     <template>
                             <button v-show="!show" @click="attack" id="attack">ATTACK</button>
-                            <button v-show="!show" id="special-attack">SPECIAL ATTACK</button>
-                            <button v-show="!show" id="heal">HEAL</button>
-                            <button v-show="!show" id="give-up">GIVE UP</button>
+                            <button v-show="!show" @click="specialAttack" id="special-attack">SPECIAL ATTACK</button>
+                            <button v-show="!show" @click="heal" id="heal">HEAL</button>
+                            <button v-show="!show" @click="giveUp"id="give-up">GIVE UP</button>
                     </template>
                 </div>
         </template>
@@ -66,9 +66,43 @@ let VueInst = new Vue({
 
     },
     methods: {
+        startGame: function() {
+            this.meHealth = 100;
+            this.monsterHealth = 100;
+            this.isGameRunning = true;
+        },
         attack: function() {
-           VueInst.monsterHealth = Math.random(); 
-        }
+           this.monsterHealth -= this.calculateDamage(3,10);
+           this.meHealth -= this.calculateDamage(5,12);
+           this.checkWin();
+        },
+        specialAttack: function() {
+            console.log("Is being called");
+        },
+        heal: function() {
+            console.log("Is being called");
+        },
+        giveUp: function() {
+            this.isGameRunning = false;
+            console.log("Is being called");
+            console.log(this.isGameRunning);
+            },
+        calculateDamage: function(min, max) {
+            return Math.max(Math.floor(Math.random() * 10), min);
+        },
+        checkWin: function() {
+            if(this.monsterHealth<=0){
+                if(confirm("You Won! Try again?")){
+                    this.startGame();
+                }
+            }else if(this.meHealth<=0){
+               if(confirm("You lost! Try again?")){
+                   this.startGame();
+               }else {
+                   this.isGameRunning = false;
+               }
+            }
+        }    
 
     },
 
